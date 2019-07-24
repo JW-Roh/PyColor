@@ -1,6 +1,5 @@
 from textwrap import wrap
 from termcolor import colored
-from sty import fg, bg, ef, rs, RgbFg
 
 def rgbToHex(int1, int2, int3):
     a = str(hex(int1)).replace("0x", "")
