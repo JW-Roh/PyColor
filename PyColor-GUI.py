@@ -1,5 +1,5 @@
 import wx
-from textwrap import wrap
+from PyColor import rgbToHex, hexToRGB
 
 class PyColorGUI(wx.Frame):
     def __init__(self):
@@ -26,38 +26,6 @@ class PyColorGUI(wx.Frame):
         self.Bind(wx.EVT_TEXT, self.OnTextChangeHEX, self.textHEX)
         self.ChangeColorRGB()
 
-    def rgbToHex(self, int1, int2, int3):
-        a = str(hex(int1)).replace("0x", "")
-        b = str(hex(int2)).replace("0x", "")
-        c = str(hex(int3)).replace("0x", "")
-
-        if len(a) == 1:
-            a = "0" + a
-        if len(b) == 1:
-            b = "0" + b
-        if len(c) == 1:
-            c = "0" + c
-
-        hexInString = "#" + a + b + c
-        return hexInString
-
-    def hexToRGB(self, hex):
-        int1 = None
-        int2 = None
-        int3 = None
-        hexInList = wrap(hex.replace("#", ""), 2)
-        rgbFrame = "{0}, {1}, {2}"
-
-        for string in hexInList:
-            if not int1:
-                int1 = str(int(string, 16))
-            elif not int2:
-                int2 = str(int(string, 16))
-            elif not int3:
-                int3 = str(int(string, 16))
-
-        return rgbFrame.format(int1, int2, int3)
-
     def OnTextChangeRGB(self, e):
         self.ChangeColorRGB();
 
@@ -78,9 +46,16 @@ class PyColorGUI(wx.Frame):
                     g = str(num)
                 elif not b:
                     b = str(num)
-            self.textHEX.SetValue(self.rgbToHex(int(r), int(g), int(b)))
+            self.textHEX.SetValue(rgbToHex(int(r), int(g), int(b)))
             self.mainPanel.SetBackgroundColour(wx.Colour(int(r), int(g), int(b)))
             self.mainPanel.Refresh()
+
+        if self.textRGB.GetValue() == "255, 255, 255":
+            self.staticRGB.SetForegroundColour(wx.Colour(0, 0, 0))
+            self.staticHEX.SetForegroundColour(wx.Colour(0, 0, 0))
+        else:
+            self.staticRGB.SetForegroundColour(wx.Colour(255, 255, 255))
+            self.staticHEX.SetForegroundColour(wx.Colour(255, 255, 255))
 
     def ChangeColorHEX(self):
         hexValue = self.textHEX.GetValue()
@@ -89,7 +64,7 @@ class PyColorGUI(wx.Frame):
             hexValue = "#"+hexValue
 
         if len(hexValue) == 7:
-            responseRGB = self.hexToRGB(hexValue)
+            responseRGB = hexToRGB(hexValue)
             r = None
             g = None
             b = None
@@ -106,6 +81,13 @@ class PyColorGUI(wx.Frame):
             self.textRGB.SetValue(rgbFrame.format(r, g, b))
             self.mainPanel.SetBackgroundColour(wx.Colour(int(r), int(g), int(b)))
             self.mainPanel.Refresh()
+
+        if self.textRGB.GetValue() == "255, 255, 255":
+            self.staticRGB.SetForegroundColour(wx.Colour(0, 0, 0))
+            self.staticHEX.SetForegroundColour(wx.Colour(0, 0, 0))
+        else:
+            self.staticRGB.SetForegroundColour(wx.Colour(255, 255, 255))
+            self.staticHEX.SetForegroundColour(wx.Colour(255, 255, 255))
 
 
 if __name__ == "__main__":

@@ -83,5 +83,3 @@ def ask():
         ask()
     else:
         exit()
-
-ask()
